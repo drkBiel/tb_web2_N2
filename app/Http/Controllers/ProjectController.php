@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Project;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 
 class ProjectController extends Controller
@@ -12,8 +13,6 @@ class ProjectController extends Controller
     public function index() {
         $project = Project::all();
         $total = Project::all()->count();
-        $user = User::all();
-        $totalUser = User::all()->count();
         return view('list-project', compact('project', 'total'), compact('user','totalUser'));
     }
     public function sobre(){
@@ -34,9 +33,14 @@ class ProjectController extends Controller
         $project->description = $request->description;
         $project->value = $request->value;
         $project->temp = $request->temp;
-        $project->imagem = $request->imagem;
+        $project->imagem_1 = $request->imagem_1;
+        $request->imagem_1->store('img');
+
+        $project->imagem_2 = $request->imagem_2;
+        $request->imagem_2->store('img');
+        
         $project->supporter = "";
-        $project->id_User = 0;
+        $project->id_User = $request->idUser;
         $project->finalizado = 0;
         $project->save();
         return redirect()->route('project-index')->with('message', 'Projeto criado com sucesso!');
@@ -57,7 +61,8 @@ class ProjectController extends Controller
         $project->description = $request->description;
         $project->value = $request->value;
         $project->temp = $request->temp;
-        $project->imagem = $request->imagem;
+        $project->imagem_1 = $request->imagem_1;
+        $project->imagem_2 = $request->imagem_2;
         $project->supporter = "";
         $project->save();
         return redirect()->route('project-index')->with('message', 'Projeto alterado com sucesso!');
@@ -68,7 +73,8 @@ class ProjectController extends Controller
         $project->name = $project->name;
         $project->description = $project->description;
         $project->temp = $project->temp;
-        $project->imagem = $project->imagem; 
+        $project->imagem_1 = $request->imagem_1;
+        $project->imagem_2 = $request->imagem_2;
         $project->value += $request->value;
         $project->supporter = $project->supporter . ", " .$request->nameSupporter;
         $project->save();
@@ -79,19 +85,28 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
         $project->finalizado = 1;
         $project->save();
-        return redirect()->route('project-index')->with('message', 'Projeto finalizado com sucesso!');
+        return redirect()->route('project-index')->with('message', 'Contribuição realizada com sucesso!');
     }
     
-    public function find(Request $request) {
-        $projects = DB::table('project')->where('name', 'like', '%'.$request->pesquisa.'%');
-        
-        return redirect()->route('index-project')->with('message', 'Contribuição realizada com sucesso!');
+    public function filter(Request $request) {
+        $project = DB::table('project')->where('name','Like','%' . $request->pesquisa . '%' )->get();
+        $total = count($project);
+
+        return view('list-project', compact('project', 'total'));
+
     }
 
     public function destroy($id) {
         $project = Project::findOrFail($id);
         $project->delete();
         return redirect()->route('index-project')->with('message', 'Projeto excluído com sucesso!');
+    }
+
+    public function filterMyProjects(Request $request) {
+        $project = Project::all();
+        $total = Project::all()->count();
+        return view('myProjects', compact('project', 'total'));
+
     }
 
 }

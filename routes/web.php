@@ -15,23 +15,37 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+//Pagina inicial ao logar
+Route::get('/home','ProjectController@index')->name('project-index');
+
+//Rota do logout
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-
-
-Route::get('/home','ProjectController@index')->name('project-index');
 Auth::routes();
+
 
 //Rotas das ações do projeto
 Route::get('/addProjeto','ProjectController@store')->name('project.create');
 Route::get('/editProject/{id}','ProjectController@update')->name('project.edit');
 
+//Finalizar o projeto
 Route::get('/projectFinish/{id}','ProjectController@projectFinish')->name('project.finish');
 
+//Editar projeto
 Route::get('/editProject/{id}','ProjectController@update')->name('project.edit');
+
+//Apoiar projeto
 Route::get('/projectSupport/{id}','ProjectController@support')->name('project.support');
 
+//Filtrar projeto
+Route::get('/filterProject','ProjectController@filter')->name('project.filter');
 
+//Rota meus projetos
+Route::get('/myProjects','ProjectController@filterMyProjects')->name('project.myProjs');
+
+
+//Página sobre
 Route::get('/sobre', 'ProjectController@sobre')->name('sobre');
 
 

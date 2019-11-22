@@ -112,13 +112,14 @@
                         </div>
                     </div>           
                 </div>
+                
 
 
-
+            
                 <div class="row">
                     <div class="col-md-12">   
                         <br />
-                        <h4 id="center"><b>PROJETOS CADASTRADOS ({{$total}})</b></h4>
+                        <h4 id="center"><b>MEUS PROJETOS</b></h4>
                         <br>
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -136,11 +137,13 @@
                                 </thead>
                                 <tbody>
                                     @foreach($project as $project)
+
                                     
-                                    
-                                    
+                                    @if (Auth::id() == $project->id_User )
+                                                                     
 
                                     <tr id="testeProjetos{{$project->id}}">
+
                                         @if ($project->finalizado == 1)
                                             
                                             <style> 
@@ -158,9 +161,11 @@
 
                                             </style>
 
+                                            
                                         @endif
 
-                                        <div class="modal fade" id="modalEdit_p{{$project->id}}" tabindex="-1" role="dialog" aria-labelledby="modalEditar" aria-hidden="true">
+                                        <!-- Modal Editar -->
+                                    <div class="modal fade" id="modalEdit_p{{$project->id}}" tabindex="-1" role="dialog" aria-labelledby="modalEditar" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                             <div class="modal-header">
@@ -171,7 +176,7 @@
                                                 <h3 class="modal-title" id="exampleModalLabel" align="center" style="margin-top: 2%;"> Editar projeto</h3>
                                             </div>
                                             
-                                            <form action="{{route('project.edit', $project->id)}}"  enctype=”multipart/form-data”>
+                                            <form action="{{route('project.edit', $project->id)}}">
                                                 <div class="modal-body" style="margin-left: 5%; margin-right: 5%;">
                                                     <div class="row" style="margin-top: 2%;">
                                                         <div class="col-xs-12">
@@ -194,16 +199,12 @@
                                                     </div>
 
                                                     <div class="row" style="margin-top: 4%;">
-                                                        <div class="col-xs-6" align="center">
-                                                            <h4>1ª Foto:</h4> <input type="text" value="{{$project->imagem_1}}" name="txt_imagem_1" class="form-control">
-                                                            <img src="img/{{$project->imagem_1}}" style="width: 100%; margin-top:5%; margin-bottom:5%;"/>
-                                                            <input type="file" value="{{$project->imagem_1}}" name="imagem_1" value="{{$project->imagem_1}}" class="form-control">
+                                                        <div class="col-xs-6">
+                                                            <h4>1ª Foto:</h4> <input type="file" name="imagem" value="{{$project->imagem}}" class="form-control">
                                                         </div>
 
-                                                        <div class="col-xs-6" align="center">
-                                                            <h4>2ª Foto:</h4> <input type="text" value="{{$project->imagem_2}}" name="txt_imagem_2 " class="form-control">
-                                                            <img src="img/{{$project->imagem_2}}" style="width: 100%; margin-top:5%; margin-bottom:5%;"/>
-                                                            <input type="file" value="{{$project->imagem_2}}" name="imagem_2" value="{{$project->imagem_2}}" class="form-control">
+                                                        <div class="col-xs-6">
+                                                            <h4>2ª Foto:</h4> <input type="file" class="form-control" value="{{$project->imagem}}" placeholder="Nome">
                                                         </div>
                                                     </div>
                                                 
@@ -225,14 +226,9 @@
                                         <td title="Tempo">{{$project->temp}}</td>
                                         
                                         <td id="center">
-                                            <a href="img/{{$project->imagem_1}}"
-                                               data-lightbox="img/{{$project->imagem_1}}">
-                                                <img src="img/{{$project->imagem_1}}" style="width: 10%;"/>
-                                            </a>
-                                            <br>
-                                            <a href="img/{{$project->imagem_2}}"
-                                               data-lightbox="img/{{$project->imagem_2}}">
-                                                <img src="img/{{$project->imagem_2}}" style="width: 10%;"/>
+                                            <a href="{{URL::asset('projects/'. '1' . $project->imagem)}}" 
+                                               data-lightbox="{{URL::asset('project/'. '1' . $project->imagem)}}">
+                                                <img src="{{URL::asset('projects/'. $project->imagem)}}" />
                                             </a>
                                         </td>
                                         
@@ -266,7 +262,7 @@
                                                     <a><i class="fa fa-trash-o"></i></a>                                                    
                                                 </button>
                                             </form>
-
+                                            
                                             @if($project->finalizado == 0)
                                             &nbsp;
                                             <form style="display: inline-block;" method="get" action="{{route('project.finish', $project->id)}}" data-toggle="tooltip" data-placement="top"title="Finish" 
@@ -279,6 +275,7 @@
                                                 
                                             </form>
                                             @endif
+
 
                                             @endif
                                             
@@ -294,10 +291,13 @@
                                                 <i class="fa fa-thumbs-up"></i>
                                             </a>
                                             @endif
+                                            
+                                            
                                         </td>
                                     </tr>
 
                                     
+
 
                                     <div class="modal fade" id="modalApoiador_p{{$project->id}}" tabindex="-1" role="dialog" aria-labelledby="modalApoiador" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -340,6 +340,8 @@
 
                                     
 
+                                    
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -360,7 +362,7 @@
                         </button>
                         <h3 class="modal-title" id="exampleModalLabel" align="center" style="margin-top: 2%;"> Novo projeto</h3>
                     </div>
-                    <form action="{{route('project.create')}}" enctype=”multipart/form-data”>
+                    <form action="{{route('project.create')}}">
                         <div class="modal-body" style="margin-left: 5%; margin-right: 5%;">
                             <div class="row" style="margin-top: 2%;">
                                 <div class="col-xs-12">
@@ -385,11 +387,11 @@
 
                             <div class="row" style="margin-top: 4%;">
                                 <div class="col-xs-6">
-                                    <h4>1ª Foto:</h4> <input type="file" name="imagem_1" class="form-control">
+                                    <h4>1ª Foto:</h4> <input type="file" name="imagem" class="form-control">
                                 </div>
 
                                 <div class="col-xs-6">
-                                    <h4>2ª Foto:</h4> <input type="file" name="imagem_2" class="form-control" placeholder="Nome">
+                                    <h4>2ª Foto:</h4> <input type="file" class="form-control" placeholder="Nome">
                                 </div>
                             </div>
                            
