@@ -32,6 +32,10 @@ Route::get('/editProject/{id}','ProjectController@update')->name('project.edit')
 //Finalizar o projeto
 Route::get('/projectFinish/{id}','ProjectController@projectFinish')->name('project.finish');
 
+//Finalizar o projeto
+Route::delete('/projectDestroy/{id}','ProjectController@destroy')->name('project.destroy');
+
+
 //Editar projeto
 Route::get('/editProject/{id}','ProjectController@update')->name('project.edit');
 

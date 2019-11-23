@@ -13,7 +13,7 @@ class ProjectController extends Controller
     public function index() {
         $project = Project::all();
         $total = Project::all()->count();
-        return view('list-project', compact('project', 'total'), compact('user','totalUser'));
+        return view('list-project', compact('project', 'total'));
     }
     public function sobre(){
         return view('sobre');
@@ -33,11 +33,9 @@ class ProjectController extends Controller
         $project->description = $request->description;
         $project->value = $request->value;
         $project->temp = $request->temp;
-        $project->imagem_1 = $request->imagem_1;
-        $request->imagem_1->store('img');
+        $project->imagem_1 = "";
 
-        $project->imagem_2 = $request->imagem_2;
-        $request->imagem_2->store('img');
+        $project->imagem_2 = "";
         
         $project->supporter = "";
         $project->id_User = $request->idUser;
@@ -61,8 +59,8 @@ class ProjectController extends Controller
         $project->description = $request->description;
         $project->value = $request->value;
         $project->temp = $request->temp;
-        $project->imagem_1 = $request->imagem_1;
-        $project->imagem_2 = $request->imagem_2;
+        $project->imagem_1 = "";
+        $project->imagem_2 = "";
         $project->supporter = "";
         $project->save();
         return redirect()->route('project-index')->with('message', 'Projeto alterado com sucesso!');
@@ -73,8 +71,8 @@ class ProjectController extends Controller
         $project->name = $project->name;
         $project->description = $project->description;
         $project->temp = $project->temp;
-        $project->imagem_1 = $request->imagem_1;
-        $project->imagem_2 = $request->imagem_2;
+        $project->imagem_1 = "";
+        $project->imagem_2 = "";
         $project->value += $request->value;
         $project->supporter = $project->supporter . ", " .$request->nameSupporter;
         $project->save();
@@ -85,7 +83,7 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
         $project->finalizado = 1;
         $project->save();
-        return redirect()->route('project-index')->with('message', 'Contribuição realizada com sucesso!');
+        return redirect()->route('project-index')->with('message', 'Contribuição finalizado com sucesso!');
     }
     
     public function filter(Request $request) {
@@ -99,7 +97,7 @@ class ProjectController extends Controller
     public function destroy($id) {
         $project = Project::findOrFail($id);
         $project->delete();
-        return redirect()->route('index-project')->with('message', 'Projeto excluído com sucesso!');
+        return redirect()->route('project-index')->with('message', 'Projeto excluído com sucesso!');
     }
 
     public function filterMyProjects(Request $request) {

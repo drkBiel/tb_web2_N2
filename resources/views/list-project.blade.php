@@ -258,7 +258,7 @@
                                             @endif
                                             
 
-                                            <form style="display: inline-block;" method="POST" action="{{route('project.finish', $project->id)}}" data-toggle="tooltip" data-placement="top"title="Finish" 
+                                            <form style="display: inline-block;" method="POST" action="{{route('project.destroy', $project->id)}}" data-toggle="tooltip" data-placement="top"title="Finish" 
                                                         onsubmit="return confirm('Confirma exclusão?')">
                                                 
                                                 {{method_field('DELETE')}}{{ csrf_field() }}                                                
